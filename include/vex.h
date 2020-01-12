@@ -15,3 +15,5 @@ motor LeftFrontMotor (vex::PORT20, vex::gearSetting::ratio18_1,false);
 //Add motor definitions here:
 controller Controller1;
 competition Competition;
+//Add gobal variable initializations here:
+int auton;

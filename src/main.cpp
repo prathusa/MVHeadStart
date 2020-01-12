@@ -1,9 +1,7 @@
-#include "robot-config.h"
-using namespace vex;
+#include "vex.h"
+auton = -1;
 
-int auton = -1;
-
-extern void askPosition()
+void askPosition()
 {
     Brain.Screen.clearScreen();
     Brain.Screen.setFont(fontType::mono40);
@@ -16,7 +14,8 @@ extern void askPosition()
     Brain.Screen.drawRectangle(240, 115, 240, 115, blue); //BBS
     Brain.Screen.printAt(330,180,"BBS");
 }
-extern void pre_auton(void) 
+
+void pre_auton(void) 
 {
     int xLastTouch = Brain.Screen.xPosition();
     int yLastTouch = Brain.Screen.yPosition();
@@ -124,7 +123,7 @@ void autonomous(void)
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("Running RFS");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
         autoRFS();
     }
     else if(auton == 1)
@@ -132,7 +131,7 @@ void autonomous(void)
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("Running BFS");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
         autoBFS();
     }
     else if(auton == 2)
@@ -140,7 +139,7 @@ void autonomous(void)
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("Running RBS");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
         autoRBS();
     }
     else if(auton == 3)
@@ -148,7 +147,7 @@ void autonomous(void)
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("Running BBS");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
         autoBBS();
     }
     else
@@ -157,15 +156,12 @@ void autonomous(void)
         Controller1.Screen.clearScreen();
         Controller1.Screen.print(":( i sleep");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
     }
 }
 
-
-
 void usercontrol(void) 
 {
-    int driveSpeedFactor = 1;
     while(1) 
     {
         // ------------------------Drive
@@ -180,6 +176,7 @@ void usercontrol(void)
 
     }
 }
+
 int main() {
     
     //Run the pre-autonomous function. 
