@@ -1,7 +1,7 @@
 #include "vex.h"
-auton = -1;
+int auton = -1;
 
-void askPosition()
+void askPosition(void)
 {
     Brain.Screen.clearScreen();
     Brain.Screen.setFont(fontType::mono40);
@@ -54,44 +54,44 @@ void pre_auton(void)
         Brain.Screen.clearScreen();
         Brain.Screen.print("RFS Selected");
         Brain.Screen.newLine();
-        Brain.Screen.print("By: Pratham Baid");
+        Brain.Screen.print("Team 8995_");
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("RFS Selected");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
     }
     else if(auton == 1)
     {
         Brain.Screen.clearScreen();
         Brain.Screen.print("BFS Selected");
         Brain.Screen.newLine();
-        Brain.Screen.print("By: Pratham Baid");
+        Brain.Screen.print("Team 8995_");
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("BFS Selected");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
     }
     else if(auton == 2)
     {
         Brain.Screen.clearScreen();
         Brain.Screen.print("RBS Selected");
         Brain.Screen.newLine();
-        Brain.Screen.print("By: Pratham Baid");
+        Brain.Screen.print("Team 8995_");
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("RBS Selected");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
     }
     else if(auton == 3)
     {
         Brain.Screen.clearScreen();
         Brain.Screen.print("BBS Selected");
         Brain.Screen.newLine();
-        Brain.Screen.print("By: Pratham Baid");
+        Brain.Screen.print("Team 8995_");
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("BBS Selected");
         Controller1.Screen.newLine();
-        Controller1.Screen.print("By: Pratham");
+        Controller1.Screen.print("Team 8995_");
     }
    
 }
@@ -166,10 +166,8 @@ void usercontrol(void)
     {
         // ------------------------Drive
         
-        LeftFrontMotor.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
-        RightFrontMotor.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
-        LeftRearMotor.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
-        RightRearMotor.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
+        leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
+        rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
         
         // -----------------------------Add Button Commands Here:
 

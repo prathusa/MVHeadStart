@@ -8,12 +8,21 @@
 
 using namespace vex;
 brain Brain;
-motor RightFrontMotor (vex::PORT11, vex::gearSetting::ratio18_1,true);
-motor RightRearMotor (vex::PORT12, vex::gearSetting::ratio18_1,true);
-motor LeftRearMotor (vex::PORT19, vex::gearSetting::ratio18_1,false);
-motor LeftFrontMotor (vex::PORT20, vex::gearSetting::ratio18_1,false);
-//Add motor definitions here:
 controller Controller1;
 competition Competition;
-//Add gobal variable initializations here:
-int auton;
+
+//Add motor definitions here:
+motor rightFrontMotor (vex::PORT11, vex::gearSetting::ratio18_1, true);
+motor rightRearMotor (vex::PORT12, vex::gearSetting::ratio18_1, true);
+motor leftRearMotor (vex::PORT19, vex::gearSetting::ratio18_1, false);
+motor leftFrontMotor (vex::PORT20, vex::gearSetting::ratio18_1, false);
+
+//Add sensor definitions here:
+inertial Inertial(vex::PORT20);
+pot Potentiometer(Brain.ThreeWirePort.A);
+
+//Add motor_group/drivetrain definitions here:
+motor_group rightGroup(rightFrontMotor, rightRearMotor); 
+motor_group leftGroup(leftFrontMotor, leftRearMotor);
+drivetrain driveTrain(leftGroup, rightGroup);
+smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in);
