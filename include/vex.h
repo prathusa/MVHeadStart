@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <bits/stdc++.h>
+#include <unistd.h>
 
 #include "v5.h"
 #include "v5_vcs.h"
@@ -22,7 +24,7 @@ inertial Inertial(vex::PORT20);
 pot Potentiometer(Brain.ThreeWirePort.A);
 
 //Add motor_group/drivetrain definitions here:
-motor_group rightGroup(rightFrontMotor, rightRearMotor); 
 motor_group leftGroup(leftFrontMotor, leftRearMotor);
+motor_group rightGroup(rightFrontMotor, rightRearMotor); 
 drivetrain driveTrain(leftGroup, rightGroup);
 smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in);
