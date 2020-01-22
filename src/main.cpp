@@ -1,18 +1,37 @@
 #include "vex.h"
 int auton = -1;
 
-void askPosition(void)
-{
-    Brain.Screen.clearScreen();
-    Brain.Screen.setFont(fontType::mono40);
-    Brain.Screen.drawRectangle(0, 0, 240, 115, red); //RFS
-    Brain.Screen.printAt(90,70,"RFS");
-    Brain.Screen.drawRectangle(240, 0, 240, 115, blue); //BFS
-    Brain.Screen.printAt(330,70,"BFS");
-    Brain.Screen.drawRectangle(0, 115, 240, 115, red); //RBS
-    Brain.Screen.printAt(90,180,"RBS");
-    Brain.Screen.drawRectangle(240, 115, 240, 115, blue); //BBS
-    Brain.Screen.printAt(330,180,"BBS");
+void askPosition(void) {
+  Brain.Screen.clearScreen();
+  Brain.Screen.setFont(prop30);
+  Brain.Screen.setPenColor(color(180, 180, 180));
+  Brain.Screen.printAt(0, 30, "Battery Percentage: %d%%", Brain.Battery.capacity());
+  Brain.Screen.setFont(prop20);
+  Brain.Screen.drawLine(300, 0, 300, 40);
+  Brain.Screen.setPenColor(color(0, 150, 0));
+  Brain.Screen.drawRectangle(305, 0, 170, 40, color(0, 150, 0));
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(365, 25, false, "Skills");
+  Brain.Screen.setPenColor(color(180, 180, 180));
+  Brain.Screen.setFont(prop30);
+  Brain.Screen.drawLine(0, 40, 480, 40);
+  Brain.Screen.setPenColor(color(180, 0, 0));
+  Brain.Screen.drawRectangle(10, 50, 220, 85, color(180, 0, 0));
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(95, 100, false, "RFS");
+  Brain.Screen.setPenColor(color(0, 0, 180));
+  Brain.Screen.drawRectangle(250, 50, 220, 85, color(0, 0, 180));
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(335, 100, false, "BFS");
+  Brain.Screen.setPenColor(color(180, 0, 0));
+  Brain.Screen.drawRectangle(10, 145, 220, 85, color(180, 0, 0));
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(95, 195, false, "RBS");
+  Brain.Screen.setPenColor(color(0, 0, 180));
+  Brain.Screen.drawRectangle(250, 145, 220, 85, color(0, 0, 180));
+  Brain.Screen.setPenColor(black);
+  Brain.Screen.printAt(335, 195, false, "BBS");
+  Brain.Screen.setPenColor(color(180, 180, 180));
 }
 
 //turn method that turns to a target rotation
@@ -33,85 +52,62 @@ void turn(double degrees) //P loop turn code (better than the smartdrive methods
   rightGroup.stop();
 }
 
-void pre_auton(void) 
-{
-    int xLastTouch = Brain.Screen.xPosition();
-    int yLastTouch = Brain.Screen.yPosition();
-    askPosition();
-    while(Brain.Screen.xPosition() == xLastTouch && Brain.Screen.yPosition() == yLastTouch)
-    {
-        vex::task::sleep(20);
+void pre_auton(void) {
+  int xLastTouch = Brain.Screen.xPosition();
+  int yLastTouch = Brain.Screen.yPosition();
+  askPosition();
+  while (Brain.Screen.xPosition() == xLastTouch && Brain.Screen.yPosition() == yLastTouch) {
+    vex::task::sleep(20);
+  }
+  bool k = true;
+  while (k) {
+    if ((Brain.Screen.xPosition() >= 10 && Brain.Screen.xPosition() <= 230) && (Brain.Screen.yPosition() >= 50 && Brain.Screen.yPosition() <= 135)) {
+      auton = 0;
+      k = false;
+    } else if ((Brain.Screen.xPosition() >= 250 && Brain.Screen.xPosition() <= 470) && (Brain.Screen.yPosition() >= 50 && Brain.Screen.yPosition() <= 135)) {
+      auton = 1;
+      k = false;
+    } else if ((Brain.Screen.xPosition() >= 10 && Brain.Screen.xPosition() <= 230) && (Brain.Screen.yPosition() >= 145 && Brain.Screen.yPosition() <= 230)) {
+      auton = 2;
+      k = false;
+    } else if ((Brain.Screen.xPosition() >= 250 && Brain.Screen.xPosition() <= 470) && (Brain.Screen.yPosition() >= 145 && Brain.Screen.yPosition() <= 230)) {
+      auton = 3;
+      k = false;
+    } else if ((Brain.Screen.xPosition() >= 305 && Brain.Screen.xPosition() <= 475) && (Brain.Screen.yPosition() >= 0 && Brain.Screen.yPosition() <= 40)) {
+      auton = 4;
+      k = false;
     }
-    bool k = true;
-    while(k)
-    {
-        if(Brain.Screen.xPosition() < 240 && Brain.Screen.yPosition() < 115 && Brain.Screen.xPosition() > 0)
-        {
-            auton = 0;
-            k = false;
-        }
-        else if(240 < Brain.Screen.xPosition() && Brain.Screen.yPosition() < 115 && Brain.Screen.xPosition() > 0)
-        {
-            auton = 1;
-            k = false;
-        }
-        else if(Brain.Screen.xPosition() < 240 && 115 < Brain.Screen.yPosition() && Brain.Screen.xPosition() > 0)
-        {
-            auton = 2;
-            k = false;
-        }
-        else if(240 < Brain.Screen.xPosition() && 115 < Brain.Screen.yPosition() && Brain.Screen.xPosition() > 0)
-        {
-            auton = 3;
-            k = false;
-        } 
-    }
-    
-    if(auton == 0)
-    {
-        Brain.Screen.clearScreen();
-        Brain.Screen.print("RFS Selected");
-        Brain.Screen.newLine();
-        Brain.Screen.print("Team 8995_");
-        Controller1.Screen.clearScreen();
-        Controller1.Screen.print("RFS Selected");
-        Controller1.Screen.newLine();
-        Controller1.Screen.print("Team 8995_");
-    }
-    else if(auton == 1)
-    {
-        Brain.Screen.clearScreen();
-        Brain.Screen.print("BFS Selected");
-        Brain.Screen.newLine();
-        Brain.Screen.print("Team 8995_");
-        Controller1.Screen.clearScreen();
-        Controller1.Screen.print("BFS Selected");
-        Controller1.Screen.newLine();
-        Controller1.Screen.print("Team 8995_");
-    }
-    else if(auton == 2)
-    {
-        Brain.Screen.clearScreen();
-        Brain.Screen.print("RBS Selected");
-        Brain.Screen.newLine();
-        Brain.Screen.print("Team 8995_");
-        Controller1.Screen.clearScreen();
-        Controller1.Screen.print("RBS Selected");
-        Controller1.Screen.newLine();
-        Controller1.Screen.print("Team 8995_");
-    }
-    else if(auton == 3)
-    {
-        Brain.Screen.clearScreen();
-        Brain.Screen.print("BBS Selected");
-        Brain.Screen.newLine();
-        Brain.Screen.print("Team 8995_");
-        Controller1.Screen.clearScreen();
-        Controller1.Screen.print("BBS Selected");
-        Controller1.Screen.newLine();
-        Controller1.Screen.print("Team 8995_");
-    }
-   
+  }
+
+  if (auton == 0) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("RFS Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("RFS Selected");
+  } else if (auton == 1) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("BFS Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("BFS Selected");
+  } else if (auton == 2) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("RBS Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("RBS Selected");
+  } else if (auton == 3) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("BBS Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("BBS Selected");
+  } else if (auton == 4) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("Skills Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("Skills Selected");
+  }
+
+  Inertial.calibrate(2000);
+  vex::task::sleep(2000);
 }
 
 void autoRFS()
@@ -132,6 +128,11 @@ void autoRBS()
 void autoBBS()
 {
     //Code Blue Back Side auton here:
+}
+
+void autoSkills()
+{
+    //Code Skills auton here:
 }
 
 void autonomous(void) 
@@ -167,6 +168,14 @@ void autonomous(void)
         Controller1.Screen.newLine();
         Controller1.Screen.print("Team 8995_");
         autoBBS();
+    }
+    else if(auton == 4) 
+    {
+        Controller1.Screen.clearScreen();
+        Controller1.Screen.print("Running Skills");
+        Controller1.Screen.newLine();
+        Controller1.Screen.print("Team 8995_");
+        autoSkills();
     }
     else
     {
