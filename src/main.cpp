@@ -135,7 +135,7 @@ void autoSkills()
     //Code Skills auton here:
 }
 
-void autonomous(void) 
+void autonomous(void)
 {
     if(auton == 0)
     {
@@ -169,7 +169,7 @@ void autonomous(void)
         Controller1.Screen.print("Team 8995_");
         autoBBS();
     }
-    else if(auton == 4) 
+    else if(auton == 4)
     {
         Controller1.Screen.clearScreen();
         Controller1.Screen.print("Running Skills");
@@ -187,32 +187,111 @@ void autonomous(void)
     }
 }
 
-void usercontrol(void) 
+void usercontrol(void)
 {
-    while(1) 
+    while(1)
     {
         // ------------------------Drive
-        
+
         leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
         rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
-        
-        // -----------------------------Add Button Commands Here:
 
+        // -----------------------------Add Button Commands Here:
+        
+        /* 
+        
+        -Not all of these if statements need code in them.
+            You just need to code the buttons you want to use with the commands that you want the button press to complete.
+        -Basically, all of these if statements sense if the button is pressing on the controller 
+            and if that is true does all of the commands enclosed in the brackets {} of the statement.
+        
+        */
+        if(Controller1.ButtonA.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonB.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonUp.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonDown.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonR1.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonR2.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonL1.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonL2.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonX.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonY.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonLeft.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonRight.pressing())
+        {
+          //macro button template
+        }
 
     }
 }
 
 int main() {
-    
-    //Run the pre-autonomous function. 
+
+    //Run the pre-autonomous function.
     pre_auton();
-    
+
     //Set up callbacks for autonomous and driver control periods.
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );
-    
-    //Prevent main from exiting with an infinite loop.                        
-    while(1) 
+
+    //Prevent main from exiting with an infinite loop.
+    while(1)
     {
       vex::task::sleep(100);//Sleep the task for a short amount of time to prevent wasted resources.
     }
