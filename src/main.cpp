@@ -1,12 +1,22 @@
 #include "vex.h"
 int auton = -1;
 
+void drive_Tank() {
+  leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
+  rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
+}
+
+void drive_Arcade() {
+  leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value() + Controller1.Axis1.value(), vex::velocityUnits::pct);
+  rightGroup.spin(vex::directionType::fwd, Controller1.Axis3.value() - Controller1.Axis1.value(), vex::velocityUnits::pct);
+}
+
 void controls()
 {
         // ------------------------Drive
 
-        leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
-        rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
+        drive_Arcade();
+        // drive_Tank(); - Switch between the 2 and find what you/your driver wants to use
 
         // -----------------------------Add Button Commands Here:
         
@@ -91,7 +101,8 @@ void controls()
         }
 }
 
-void askPosition(void) {
+// GUI initialization code, don't change unless you know what you are doing
+void askPosition(void) { 
   Brain.Screen.clearScreen();
   Brain.Screen.setFont(prop30);
   Brain.Screen.setPenColor(color(180, 180, 180));
@@ -176,6 +187,7 @@ void turn(double degrees) //P loop turn code (better than the smartdrive methods
   vex::task::sleep(10);
 }
 
+//Auton recorder, do not change at all unless you know what you are doing (except for save file name if needed) 
 void auton_recorder()
 {
     uint8_t data[3000];
@@ -197,8 +209,8 @@ void auton_recorder()
         data[i] = (uint8_t) (leftGroup.velocity(vex::velocityUnits::pct) + 100);
         data[i + 1] = (uint8_t) (rightGroup.velocity(vex::velocityUnits::pct) + 100);
         data[i + 2] = (uint8_t) (placeHolderMotor1.velocity(vex::velocityUnits::pct) + 100);
-        data[i + 3] = (uint8_t) (placeHolderMotor2.velocity(vex::velocityUnits::pct) + 100);
-        data[i + 4] = (uint8_t) (placeHolderMotor3.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 3] = (uint8_t) (placeHolderMotor3.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 4] = (uint8_t) (placeHolderMotor4.velocity(vex::velocityUnits::pct) + 100);
         vex::task::sleep(20);
     }
     //Changing "data.txt" will change the savefile name, this will allow multiple recordings 
@@ -233,6 +245,12 @@ void pre_auton(void)
     } else if ((Brain.Screen.xPosition() >= 305 && Brain.Screen.xPosition() <= 475) && (Brain.Screen.yPosition() >= 0 && Brain.Screen.yPosition() <= 40)) {
       auton = 4;
       k = false;
+    } else if ((Brain.Screen.xPosition() >= 15 && Brain.Screen.xPosition() <= 135) && (Brain.Screen.yPosition() >= 0 && Brain.Screen.yPosition() <= 40)) {
+      auton = 5;
+      k = false;
+    } else if ((Brain.Screen.xPosition() >= 150 && Brain.Screen.xPosition() <= 290) && (Brain.Screen.yPosition() >= 0 && Brain.Screen.yPosition() <= 40)) {
+      auton = 6;
+      k = false;
     }
   }
 
@@ -261,6 +279,21 @@ void pre_auton(void)
     Brain.Screen.print("Skills Selected");
     Controller1.Screen.clearScreen();
     Controller1.Screen.print("Skills Selected");
+  } else if (auton == 5) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("Recorder Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("Recorder Selected");
+  } else if (auton == 6) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("Playback Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("Playback Selected");
+  } else {
+    Brain.Screen.clearScreen();
+    Brain.Screen.print("No Auton Selected");
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.print("No Auton Selected");
   }
 
   Inertial.calibrate(2000);
@@ -334,8 +367,12 @@ void autonomous(void)
         Controller1.Screen.print("Team 8995_");
         autoSkills();
     }
-    else if(auton == 5)
+    else if(auton == 6)
     {
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.print("Running Playback");
+      Controller1.Screen.newLine();
+      Controller1.Screen.print("Team 8995_");
       uint8_t buf[3000];
       Brain.SDcard.loadfile("data.txt", buf, 3000);
     
@@ -362,9 +399,22 @@ void autonomous(void)
 
 void usercontrol(void)
 {
+    if(auton == 5) 
+    {
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.print("Running Recorder");
+      Controller1.Screen.newLine();
+      Controller1.Screen.print("Team 8995_");
+    }
     while(1)
     {
-      controls();
+      if(auton == 5) 
+      {
+        auton_recorder();
+      } else 
+      {
+        controls();
+      }
     }
 }
 
