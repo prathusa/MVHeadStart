@@ -1,6 +1,96 @@
 #include "vex.h"
 int auton = -1;
 
+void controls()
+{
+        // ------------------------Drive
+
+        leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
+        rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
+
+        // -----------------------------Add Button Commands Here:
+        
+        /* 
+        
+        -Not all of these if statements need code in them.
+            You just need to code the buttons you want to use with the commands that you want the button press to complete.
+        -Basically, all of these if statements sense if the button is pressing on the controller 
+            and if that is true does all of the commands enclosed in the brackets {} of the statement.
+        
+        */
+        if(Controller1.ButtonA.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonB.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonUp.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonDown.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonR1.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonR2.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonL1.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else if(Controller1.ButtonL2.pressing())
+        {
+          //add commands here to complete when button is pressing
+        }
+        else
+        {
+          //usually the motor stop command goes here
+        }
+
+        if(Controller1.ButtonX.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonY.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonLeft.pressing())
+        {
+          //macro button template
+        }
+
+        if(Controller1.ButtonRight.pressing())
+        {
+          //macro button template
+        }
+}
+
 void askPosition(void) {
   Brain.Screen.clearScreen();
   Brain.Screen.setFont(prop30);
@@ -86,7 +176,40 @@ void turn(double degrees) //P loop turn code (better than the smartdrive methods
   vex::task::sleep(10);
 }
 
-void pre_auton(void) {
+void auton_recorder()
+{
+    uint8_t data[3000];
+    Controller1.Screen.clearScreen();
+    for(int count = 5; count > 0; count--)
+    {
+      Controller1.Screen.clearLine(1);
+      Controller1.Screen.setCursor(1, 1);
+      Controller1.Screen.print(count);
+      vex::task::sleep(1000);
+    }
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("Recording");
+    for (int i = 0; i < 3000; i+= 5) 
+    {
+        controls();
+
+        data[i] = (uint8_t) (leftGroup.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 1] = (uint8_t) (rightGroup.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 2] = (uint8_t) (placeHolderMotor1.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 3] = (uint8_t) (placeHolderMotor2.velocity(vex::velocityUnits::pct) + 100);
+        data[i + 4] = (uint8_t) (placeHolderMotor3.velocity(vex::velocityUnits::pct) + 100);
+        vex::task::sleep(20);
+    }
+    //Changing "data.txt" will change the savefile name, this will allow multiple recordings 
+    Brain.SDcard.savefile("data.txt", data, 3000);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1, 1);
+    Controller1.Screen.print("Complete!");  
+}
+
+void pre_auton(void) 
+{
   int xLastTouch = Brain.Screen.xPosition();
   int yLastTouch = Brain.Screen.yPosition();
   askPosition();
@@ -211,6 +334,22 @@ void autonomous(void)
         Controller1.Screen.print("Team 8995_");
         autoSkills();
     }
+    else if(auton == 5)
+    {
+      uint8_t buf[3000];
+      Brain.SDcard.loadfile("data.txt", buf, 3000);
+    
+      for (int i = 0; i < 3000; i+= 5) 
+      {    
+          leftGroup.spin(vex::directionType::fwd, buf[i] - 100, vex::velocityUnits::pct);
+          rightGroup.spin(vex::directionType::fwd, buf[i + 1] - 100, vex::velocityUnits::pct);
+          placeHolderMotor1.spin(vex::directionType::fwd, buf[i + 2] - 100, vex::velocityUnits::pct);
+          placeHolderMotor2.spin(vex::directionType::fwd, buf[i + 2] - 100, vex::velocityUnits::pct);
+          placeHolderMotor3.spin(vex::directionType::fwd, buf[i + 3] - 100, vex::velocityUnits::pct);
+          placeHolderMotor4.spin(vex::directionType::fwd, buf[i + 4] - 100, vex::velocityUnits::pct);
+          vex::task::sleep(20);
+      }
+    }
     else
     {
         //Doesn't run Auton
@@ -225,93 +364,7 @@ void usercontrol(void)
 {
     while(1)
     {
-        // ------------------------Drive
-
-        leftGroup.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
-        rightGroup.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
-
-        // -----------------------------Add Button Commands Here:
-        
-        /* 
-        
-        -Not all of these if statements need code in them.
-            You just need to code the buttons you want to use with the commands that you want the button press to complete.
-        -Basically, all of these if statements sense if the button is pressing on the controller 
-            and if that is true does all of the commands enclosed in the brackets {} of the statement.
-        
-        */
-        if(Controller1.ButtonA.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else if(Controller1.ButtonB.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else
-        {
-          //usually the motor stop command goes here
-        }
-
-        if(Controller1.ButtonUp.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else if(Controller1.ButtonDown.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else
-        {
-          //usually the motor stop command goes here
-        }
-
-        if(Controller1.ButtonR1.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else if(Controller1.ButtonR2.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else
-        {
-          //usually the motor stop command goes here
-        }
-
-        if(Controller1.ButtonL1.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else if(Controller1.ButtonL2.pressing())
-        {
-          //add commands here to complete when button is pressing
-        }
-        else
-        {
-          //usually the motor stop command goes here
-        }
-
-        if(Controller1.ButtonX.pressing())
-        {
-          //macro button template
-        }
-
-        if(Controller1.ButtonY.pressing())
-        {
-          //macro button template
-        }
-
-        if(Controller1.ButtonLeft.pressing())
-        {
-          //macro button template
-        }
-
-        if(Controller1.ButtonRight.pressing())
-        {
-          //macro button template
-        }
-
+      controls();
     }
 }
 
@@ -327,6 +380,6 @@ int main() {
     //Prevent main from exiting with an infinite loop.
     while(1)
     {
-      vex::task::sleep(100);//Sleep the task for a short amount of time to prevent wasted resources.
+      vex::task::sleep(20);//Sleep the task for a short amount of time to prevent wasted resources.
     }
 }
