@@ -48,6 +48,7 @@ void controls()
             and if that is true does all of the commands enclosed in the brackets {} of the statement.
         
         */
+
         if(Controller1.ButtonA.pressing())
         {
           //add commands here to complete when button is pressing
@@ -107,26 +108,6 @@ void controls()
         {
           //usually the motor stop command goes here
         }
-
-        if(Controller1.ButtonX.pressing())
-        {
-          X_Button_Macro();
-        }
-
-        if(Controller1.ButtonY.pressing())
-        {
-          Y_Button_Macro();
-        }
-
-        if(Controller1.ButtonLeft.pressing())
-        {
-          Left_Button_Macro();
-        }
-
-        if(Controller1.ButtonRight.pressing())
-        {
-          Right_Button_Macro();
-        }
 }
 
 void usercontrol()
@@ -138,6 +119,15 @@ void usercontrol()
       Controller1.Screen.newLine();
       Controller1.Screen.print("Team 8995_");
     }
+    
+    //These commands work better for button macros than using if statements, as
+    //  they prevent the macro from running for every increment of time that the
+    //  button is pressed down, instead only running once per press every time
+    Controller1.ButtonX.pressed(X_Button_Macro);
+    Controller1.ButtonY.pressed(Y_Button_Macro);
+    Controller1.ButtonLeft.pressed(Left_Button_Macro);
+    Controller1.ButtonRight.pressed(Right_Button_Macro);
+
     while(1)
     {
       if(auton == 5) 

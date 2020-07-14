@@ -75,7 +75,7 @@ void autonomous()
       Controller1.Screen.newLine();
       Controller1.Screen.print("Team 8995_");
       uint8_t buf[3000];
-      Brain.SDcard.loadfile("data.txt", buf, 3000);
+      Brain.SDcard.loadfile("data.txt", buf, 3000); //Change "data.txt" if needed to change file to load from
     
       for (int i = 0; i < 3000; i+= 5) 
       {    

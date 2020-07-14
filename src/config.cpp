@@ -26,4 +26,5 @@ limit LimitSwitch(Brain.ThreeWirePort.H); //Change the letter to change the port
 motor_group leftGroup(leftFrontMotor, leftRearMotor);
 motor_group rightGroup(rightFrontMotor, rightRearMotor);
 drivetrain driveTrain(leftGroup, rightGroup);
-smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in);
+smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in); //Change the numbers according to the 
+//                                                                                        size of your base as needed
