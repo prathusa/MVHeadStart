@@ -28,7 +28,8 @@ limit LimitSwitch(Brain.ThreeWirePort.H); //Change the letter to change the port
 motor_group leftGroup(leftFrontMotor, leftRearMotor);
 motor_group rightGroup(rightFrontMotor, rightRearMotor);
 drivetrain driveTrain(leftGroup, rightGroup);
-smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in);
+smartdrive smartDrive(leftGroup, rightGroup, Inertial, 12.56, 16, 16, distanceUnits::in);//Change the numbers according to the 
+//                                                                                        size of your base as needed
 
 void drive(double distanceInches, int speed) // Speed ranges from 0 to 100
 //                     if you put in a negative number for distance then you will move backwards
@@ -190,26 +191,6 @@ void controls()
         else
         {
           //usually the motor stop command goes here
-        }
-
-        if(Controller1.ButtonX.pressing())
-        {
-          X_Button_Macro();
-        }
-
-        if(Controller1.ButtonY.pressing())
-        {
-          Y_Button_Macro();
-        }
-
-        if(Controller1.ButtonLeft.pressing())
-        {
-          Left_Button_Macro();
-        }
-
-        if(Controller1.ButtonRight.pressing())
-        {
-          Right_Button_Macro();
         }
 }
 
@@ -443,7 +424,7 @@ void autonomous()
       Controller1.Screen.newLine();
       Controller1.Screen.print("Team 8995_");
       uint8_t buf[3000];
-      Brain.SDcard.loadfile("data.txt", buf, 3000);
+      Brain.SDcard.loadfile("data.txt", buf, 3000); //Change "data.txt" if needed to load from a different file 
     
       for (int i = 0; i < 3000; i+= 5) 
       {    
@@ -475,6 +456,12 @@ void usercontrol()
       Controller1.Screen.newLine();
       Controller1.Screen.print("Team 8995_");
     }
+
+    Controller1.ButtonX.pressed(X_Button_Macro);
+    Controller1.ButtonY.pressed(Y_Button_Macro);
+    Controller1.ButtonLeft.pressed(Left_Button_Macro);
+    Controller1.ButtonRight.pressed(Right_Button_Macro);
+
     while(1)
     {
       if(auton == 5) 
