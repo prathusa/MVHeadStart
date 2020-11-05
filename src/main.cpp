@@ -38,44 +38,24 @@ void drive(double distanceInches, int speed) // Speed ranges from 0 to 100
 }
 
 //turn method that turns to a target rotation
-void turn(double degrees) //P loop turn code (better than the smartdrive methods once kP is tuned properly)
+void pTurn(double degrees) //P loop turn code (better than the smartdrive methods once kP is tuned properly)
 {
   if(Inertial.installed())
   {
+    int dt = 20; // Recommended wait time in milliseconds
     double target = degrees; // In revolutions
     double error = target - Inertial.rotation();
     double kP = .6;
-    if(error > 0)
+    while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't reduce unless you know what you are doing
     {
-      
-      while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't reduce unless you know what you are doing
-      {
-        error = target - Inertial.rotation();
-        double percent = kP * error + 20;
-        leftGroup.spin(directionType::fwd, percent, pct);
-	      rightGroup.spin(directionType::rev, percent, pct);
-        vex::task::sleep(20);
-      }
+      error = target - Inertial.rotation();
+      double percent = kP * error + 20 * error / std::abs(error);
+      leftGroup.spin(directionType::fwd, percent, pct);
+      rightGroup.spin(directionType::rev, percent, pct);
+      vex::task::sleep(dt);
     }
-    else if(error > 0)
-    {
-      double target = degrees; // In revolutions
-      double error = target - Inertial.rotation();
-      double kP = .6;
-      while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't change unless you know what you are doing
-      {
-        error = target - Inertial.rotation();
-        double percent = kP * error - 20;
-        leftGroup.spin(directionType::fwd, percent, pct);
-	      rightGroup.spin(directionType::rev, percent, pct);
-        vex::task::sleep(20);
-      }
-    }
-    else
-    {
-      leftGroup.stop();
-      rightGroup.stop();
-    }
+    leftGroup.stop();
+    rightGroup.stop();
   }
   else
   {
@@ -83,6 +63,38 @@ void turn(double degrees) //P loop turn code (better than the smartdrive methods
     Brain.Screen.setFont(fontType::mono40);
     Brain.Screen.setFillColor(red);
     Brain.Screen.print("No Inertial Sensor Installed");
+  }
+}
+
+void pdTurn(double degrees) //PD loop turn code (better than the smartdrive and P loop methods once kP and kD are tuned properly)
+{
+  if(Inertial.installed())
+  {
+    int dt = 20;  // Recommended wait time in milliseconds
+    double target = degrees; // In revolutions
+    double error = target - Inertial.rotation();
+    double kP = .7;
+    double kD = .1;
+    double prevError = error;
+    while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't reduce unless you know what you are doing
+    {
+      error = target - Inertial.rotation();
+      double derivative = (error - prevError)/dt;
+      double percent = kP * error + kD * derivative;
+      leftGroup.spin(directionType::fwd, percent, pct);
+      rightGroup.spin(directionType::rev, percent, pct);
+      vex::task::sleep(dt);
+      prevError = error;
+    }
+    leftGroup.stop();
+    rightGroup.stop();
+  }
+  else
+  {
+    Brain.Screen.clearScreen();
+    Brain.Screen.setFont(fontType::mono40);
+    Brain.Screen.setFillColor(red);
+    Brain.Screen.print("Inertial Sensor Not Detected");
   }
 }
 
