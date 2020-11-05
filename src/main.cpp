@@ -46,7 +46,7 @@ void pTurn(double degrees) //P loop turn code (better than the smartdrive method
     double target = degrees; // In revolutions
     double error = target - Inertial.rotation();
     double kP = .6;
-    while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't reduce unless you know what you are doing
+    while (std::abs(error) > 1) // Allows +- 1 degree variance, don't reduce unless you know what you are doing
     {
       error = target - Inertial.rotation();
       double percent = kP * error + 20 * error / std::abs(error);
@@ -76,7 +76,7 @@ void pdTurn(double degrees) //PD loop turn code (better than the smartdrive and 
     double kP = .7;
     double kD = .1;
     double prevError = error;
-    while (std::abs(error) > 1) //1 allows +- 1 degree variance, don't reduce unless you know what you are doing
+    while (std::abs(error) > 1) // Allows +- 1 degree variance, don't reduce unless you know what you are doing
     {
       error = target - Inertial.rotation();
       double derivative = (error - prevError)/dt;
